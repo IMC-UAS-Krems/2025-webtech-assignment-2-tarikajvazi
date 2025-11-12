@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     for (let product of products) {
 
-        let type = "";
+        let type = ""; // for badge showing the type
 
         switch (product.product_type) {
             case "Device":
@@ -124,7 +124,10 @@ document.addEventListener('DOMContentLoaded', function () {
         let card = document.createElement("div");
         card.setAttribute("style", "width: 18rem");
         card.className = "card " + product.product_type;
+
         // `` used these for being able to put code inside and not create elements one by one
+        // SVG was copied from https://icons.getbootstrap.com/icons/cart-plus-fill/
+
         card.innerHTML = `<img src="${product.product_image}" class="card-img-top" style="object-fit: contain; height: 200px" alt="${product.product_name}">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${product.product_name} <span class="badge text-bg-${type}">${product.product_type}</span></h5>
@@ -132,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <button href="#" class="btn btn-primary mt-auto" onclick="addToCart('${product.product_name}', '${product.product_type}', ${product.product_price}, '${product.product_image}')"><svg style="position: relative; top: -2px; left: -6px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                             <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
                             </svg>Add to cart</button>
-                        </div>`
+                        </div>`;
 
         document.getElementById("card-container").appendChild(card);
 
@@ -194,13 +197,13 @@ cart = []
 
 function addToCart(name, type, price, image) {
     // Check if it is in cart, if yes no need to add other, just increment quantity (default is 1)
-    alreadyInCart = false
+    let alreadyInCart = false;
 
     for (let item of cart) {
         if (item.product_name == name) {
-            item.quantity++
-            alreadyInCart = true
-            console.log("Added +1 to " + item.product_name)
+            item.quantity++;
+            alreadyInCart = true;
+            console.log("Added +1 to " + item.product_name);
         }
     }
 
@@ -211,7 +214,7 @@ function addToCart(name, type, price, image) {
             product_price: price,
             product_image: image,
             quantity: 1
-        })
+        });
     }
 
     document.getElementById("toast-container").innerHTML += `<div class="toast show bg-success text-white" data-bs-autohide="false" role="alert" aria-live="assertive"
@@ -227,14 +230,14 @@ function addToCart(name, type, price, image) {
                 </div>
             </div>`;
 
-    // count items dynamically (with length of array it is not possible bcs some product may have quantity 1+)
+    // count items dynamically (with length of array it is not possible bcs some product may have quantity >1)
 
     item_count = 0;
     for (let item of cart) {
         item_count += item.quantity;
     }
-    document.getElementById("items-in-cart").innerHTML = item_count
+    document.getElementById("items-in-cart").innerHTML = item_count;
 
-    console.log(name + " added")
-    console.log(cart)
+    console.log(name + " added");
+    console.log(cart);
 }
