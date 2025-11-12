@@ -99,10 +99,44 @@ const products = [
     }
 ];
 
-// Filters for products (If we could use jQuery it would be easier (and more beautiful))
+// Display & Filters for products (If we could use jQuery it would be easier (and more beautiful))
 
-// It didnt work without DOMContentLoaded - They need to load before selecting them
+// It didnt work without DOMContentLoaded - They need to load before displaying and selecting them
 document.addEventListener('DOMContentLoaded', function () {
+
+    for (let product of products) {
+
+        let type = "";
+
+        switch (product.product_type) {
+            case "Device":
+                type = "success";
+                break;
+            case "Beverage":
+                type = "info";
+                break;
+            case "Essential":
+                type = "warning";
+                break;
+        }
+
+        // Main div (card)
+        let card = document.createElement("div");
+        card.setAttribute("style", "width: 18rem");
+        card.className = "card " + product.product_type;
+        // `` used these for being able to put code inside and not create elements one by one
+        card.innerHTML = `<img src="${product.product_image}" class="card-img-top" style="object-fit: contain; height: 200px" alt="${product.product_name}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.product_name} <span class="badge text-bg-${type}">${product.product_type}</span></h5>
+                            <p class="card-text">${product.product_description}</p>
+                            <button href="#" class="btn btn-primary mt-auto" onclick="addToCart('${product.product_name}', '${product.product_type}', ${product.product_price}, '${product.product_image}')"><svg style="position: relative; top: -2px; left: -6px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
+                            </svg>Add to cart</button>
+                        </div>`
+
+        document.getElementById("card-container").appendChild(card);
+
+    }
 
     // Select the buttons-radios that need to have a onclick
     // I used addEventListener instead of creating new functions
@@ -189,14 +223,14 @@ function addToCart(name, type, price, image) {
                         aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
-                    <b>${name}</b> was added to cart
+                    <b>${name}</b> was added to cart (+${price}.00€)
                 </div>
             </div>`;
-    
+
     // count items dynamically (with length of array it is not possible bcs some product may have quantity 1+)
 
     item_count = 0;
-    for (let item of cart){
+    for (let item of cart) {
         item_count += item.quantity;
     }
     document.getElementById("items-in-cart").innerHTML = item_count
