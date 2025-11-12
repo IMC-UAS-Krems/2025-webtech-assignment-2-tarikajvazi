@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HHP - Donate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/scripts.js"></script>
+</head>
+
+<body class="bg-light">
+
+    <!-- https://stackoverflow.com/questions/1853662/how-to-show-page-loading-div-until-the-page-has-finished-loading
+    // Source - https://stackoverflow.com/a
+    // Posted by mehyaa, modified by community. See post 'Timeline' for change history
+    // Retrieved 2025-11-12, License - CC BY-SA 4.0
+
+    <script>
+    $(window).on('load', function () {
+        $('#loading').hide();
+    }) 
+    </script> -->
+
+    <!-- Since we cannot use jQuery I "translated" the code in StackOverflow to vanilla JS
+    I added a setTimeout for the spinner to be seen, because this webpage will almost always load fast it does not have any fetching -->
+
+
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(() => {
+                document.getElementById("spinner").style.display = "none";
+            }, 1000)
+        });
+    </script>
+
+    <!-- spinner -->
+
+    <div id="spinner">
+        <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Setup the toast notifications when adding items to cart -->
+
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="margin-top: 80px" id="toast-container">
+            <!-- add dynamically -->
+        </div>
+    </div>
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="./imgs/logo.svg" alt="HHP Logo" width="150">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Start</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#ourmission">Our Mission</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#gifts">Gifts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#results">Results</a>
+                    </li>
+                </ul>
+                <!-- SVG was copied from https://icons.getbootstrap.com/icons/cart-fill/ -->
+                <button class="btn btn-primary position-relative">
+                    <svg style="position: relative; top: -3px" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <span id="items-in-cart">0</span>
+                        <span class="visually-hidden">Items in cart</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5" id="start">
+        <div class="container text-center">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-8">
+                    <h1 class="display-5 fw-bold mb-3">
+                        Help a Hopeless Programmer <br> Find a Semicolon.
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        Every day, thousands of developers are frustrated over missing brackets,
+                        semicolons and most importantly <span class="text-bold">“Will I have a job tomorrow?”</span>
+                    </p>
+                    <a href="#gifts" class="btn btn-primary btn-lg">
+                        Donate a Gift - Motivate Someone
+                    </a>
+                </div>
+                <div class="col-12 col-lg-4 mt-5 mt-lg-0">
+                    <img class="img-fluid" src="./imgs/semi-colon.svg" alt="Semi column">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5" id="ourmission">
+        <h1 class="text-center display-5 fw-bold">Our <span class="text-primary">mission</span></h1>
+        <div class="container text-center">
+            <p class="mt-5 mb-5 fs-5">
+                Hello, we are the <span class="text-bold">HHP - Helping Hopeless Programmers</span> organisation. We
+                started our operation on 12<sup>th</sup> of November 2025, and we are not stopping until all programmers
+                regain motivation. Our mission is raising concern amongst humanity that a programmer's mental health
+                should not depend on whether the code compiles. Through this organisation we want programmers (with and
+                without jobs) to receive gifts and hopefully regain motivation for pursuing a career in this field.
+            </p>
+        </div>
+        <div class="container">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How to donate?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>Follow the instructions. </strong>Scroll down or <a href="#gifts">click here</a>,
+                            then select the products you would like to enlighten a programmer's life with.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Why this project?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>This project was strongly influenced by the following Youtube short.</strong> Search
+                            "senior js developer homeless" on Youtube
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Why donate?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>Donate a product - save a life.</strong> Simply be a good person and help those who
+                            made it possible that you read this on a device in this format.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            What do you get after donating?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>A big heart.</strong> After donating and finishing the payment, you get a relatively
+                            big heart for the donation. The size of the heart depends on the amount of donation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-3" id="gifts">
+        <h1 class="text-center display-5 fw-bold">Gift <span class="text-primary">here</span></h1>
+        <div class="container d-flex justify-content-center mt-4 mb-4">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio1">All</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Devices</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio3">Beverages</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio4">Essentials</label>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row d-flex align-items-center justify-content-center gap-3" id="card-container">
+                <script>
+                    for (let product of products) {
+
+                        let type = "";
+
+                        switch (product.product_type) {
+                            case "Device":
+                                type = "success";
+                                break;
+                            case "Beverage":
+                                type = "info";
+                                break;
+                            case "Essential":
+                                type = "warning";
+                                break;
+                        }
+
+                        // Main div (card)
+                        let card = document.createElement("div");
+                        card.setAttribute("style", "width: 18rem");
+                        card.className = "card " + product.product_type;
+                        // `` used these for being able to put code inside and not create elements one by one
+                        card.innerHTML = `<img src="${product.product_image}" class="card-img-top" style="object-fit: contain; height: 200px" alt="${product.product_name}">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${product.product_name} <span class="badge text-bg-${type}">${product.product_type}</span></h5>
+                            <p class="card-text">${product.product_description}</p>
+                            <button href="#" class="btn btn-primary mt-auto" onclick="addToCart('${product.product_name}', '${product.product_type}', ${product.product_price}, '${product.product_image}')"><svg style="position: relative; top: -2px; left: -6px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
+                            </svg>Add to cart</button>
+                        </div>`
+
+                        document.getElementById("card-container").appendChild(card);
+
+                    }
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-3" id="results">
+        <h1 class="text-center display-5 fw-bold mb-5">Happy <span class="text-primary">Developers</span></h1>
+        <p class="text-center fs-5 w-75 m-auto mb-4">These are just some of the happy faces of developers who regained
+            hope after your
+            donations. If this does not make you donate nothing else will. Contribute to more happy faces!</p>
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div id="carouselExampleCaptions" class="carousel carousel-dark slide col-8 col-md-6 col-lg-4">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0"
+                            class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="./imgs/happy.webp" class="d-block w-100" alt="Happy 1">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="p-2 text-bg-dark">Developer Happy</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="./imgs/happier.png" class="d-block w-100" alt="Happy 2">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="p-2 text-bg-dark" style="text-shadow: 0px 0px 20px rgb(73, 73, 73)">Developer
+                                    Happier</h5>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="./imgs/happiest.png" class="d-block w-100" alt="Happy 3">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 class="p-2 text-bg-dark" style="text-shadow: 0px 0px 20px rgb(73, 73, 73)">Developer
+                                    the Happiest</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-primary text-light text-center py-4">
+        <div class="container">
+            <p class="mb-1">&copy; 2025 HHF. All rights reserved.</p>
+            <p class="mb-0">
+                <a href="#" class="text-light text-decoration-none mx-2">Start</a> |
+                <a href="#ourmission" class="text-light text-decoration-none mx-2">Our Mission</a> |
+                <a href="#gifts" class="text-light text-decoration-none mx-2">Gifts</a> |
+                <a href="#results" class="text-light text-decoration-none mx-2">Results</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
