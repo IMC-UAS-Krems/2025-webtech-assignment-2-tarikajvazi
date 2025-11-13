@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${product.product_name} <span class="badge text-bg-${type}">${product.product_type}</span></h5>
                             <p class="card-text">${product.product_description}</p>
+                            <h4 class="mb-3">${product.product_price.toFixed(2)}€</h4>
                             <button href="#" class="btn btn-primary mt-auto" onclick="addToCart('${product.product_name}', '${product.product_type}', ${product.product_price}, '${product.product_image}')"><svg style="position: relative; top: -2px; left: -6px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                             <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0M9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0"/>
                             </svg>Add to cart</button>
@@ -240,4 +241,117 @@ function addToCart(name, type, price, image) {
 
     console.log(name + " added");
     console.log(cart);
+
+    document.getElementById("checkout-items").innerHTML = "";
+    document.getElementById("checkout-prices").innerHTML = "";
+
+    document.getElementById("confirmation-items").innerHTML = "";
+    document.getElementById("confirmation-prices").innerHTML = "";
+
+    for (let item of cart) {
+        document.getElementById("checkout-items").innerHTML += "<li class='list-group-item d-flex justify-content-between'><div class='d-flex justify-content-center align-items-center gap-2'><img width='30' src='" + item.product_image + "'><p class='m-0'>" + item.product_name + "</p></div><b>" + item.quantity + " x " + item.product_price + ".00€</b></li>";
+    }
+
+
+    let total = 0;
+
+    for (let item of cart) {
+        total += item.quantity * item.product_price;
+    }
+
+    let subtotal = total * 0.8; // -20% without VAT
+    let vat = total * 0.2; // 20% VAT
+
+    let discount = 0;
+
+    if (item_count >= 3) {
+        discount = 10;
+    }
+
+    let grandTotal = total - total * (discount / 100);
+
+    document.getElementById("checkout-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Price excl. VAT <span class='lead fs-6'>(-20%)</span></b><b>" + subtotal.toFixed(2) + "€</b></li>";
+    document.getElementById("checkout-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>VAT <span class='lead fs-6'>(20%)</span></b><b>" + vat.toFixed(2) + "€</b></li>";
+    document.getElementById("checkout-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Subtotal</b><b>" + (subtotal + vat).toFixed(2) + "€</b></li>";
+    document.getElementById("checkout-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Discount <span class='lead fs-6'>(" + discount + "%)</span></b><b>" + (discount / 100 * total).toFixed(2) + "€</b></li>";
+    document.getElementById("checkout-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between fs-4'><b>Grand Total </b><b>" + grandTotal.toFixed(2) + "€</b></li>";
+
+    document.getElementById("button-checkout").innerHTML = "<button class='btn btn-primary' onclick='proceedToContact()'>Checkout</button>";
+
+
+    // Fill the confirmation
+
+    for (let item of cart) {
+        document.getElementById("confirmation-items").innerHTML += "<li class='list-group-item d-flex justify-content-between'><div class='d-flex justify-content-center align-items-center gap-2'><img width='30' src='" + item.product_image + "'><p class='m-0'>" + item.product_name + "</p></div><b>" + item.quantity + " x " + item.product_price + ".00€</b></li>";
+    }
+
+    document.getElementById("confirmation-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Price excl. VAT <span class='lead fs-6'>(-20%)</span></b><b>" + subtotal.toFixed(2) + "€</b></li>";
+    document.getElementById("confirmation-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>VAT <span class='lead fs-6'>(20%)</span></b><b>" + vat.toFixed(2) + "€</b></li>";
+    document.getElementById("confirmation-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Subtotal</b><b>" + (subtotal + vat).toFixed(2) + "€</b></li>";
+    document.getElementById("confirmation-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between'><b>Discount <span class='lead fs-6'>(" + discount + "%)</span></b><b>" + (discount / 100 * total).toFixed(2) + "€</b></li>";
+    document.getElementById("confirmation-prices").innerHTML += "<li class='list-group-item d-flex justify-content-between fs-4'><b>Grand Total </b><b>" + grandTotal.toFixed(2) + "€</b></li>";
+}
+
+// I needed to check the form validity and show the modal manually because I wanted a "custom" function for the button
+
+function sendGift() {
+    const form = document.getElementById('contactForm');
+    
+    // Check if form is valid
+    if (!form.checkValidity()) {
+        // If not valid, trigger validation UI
+        form.classList.add('was-validated');
+        return; // Exit the function
+    }
+    
+    // If form is valid, proceed to show modal and fill confirmation
+    document.getElementById("confirmation-info").innerHTML = "";
+
+    let contact_name = document.getElementById("name").value;
+    let lastname = document.getElementById("lastname").value;
+    let phonenumber = document.getElementById("phonenumber").value;
+    let email = document.getElementById("email").value;
+    let city = document.getElementById("city").value;
+    let country = document.getElementById("country").value;
+    let zipcode = document.getElementById("zipcode").value;
+
+    document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Full Name: " + contact_name + " " + lastname + "</li>";
+    document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Phone number: " + phonenumber + "</li>";
+    document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Email: " + email + "</li>";
+    document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Address: " + zipcode + " " + city + ", " + country + "</li>";
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    modal.show();
+}
+
+function proceedToContact() {
+    document.getElementById("offcanvas-body").style.display = "none";
+    document.getElementById("offcanvas-body-contact").style.display = "block";
+}
+
+function goBack() {
+    document.getElementById("offcanvas-body").style.display = "block";
+    document.getElementById("offcanvas-body-contact").style.display = "none";
+}
+
+function thankYou() {
+
+    let total = 0;
+    for (let item of cart) {
+        total += item.quantity * item.product_price;
+    }
+
+    document.getElementById("thankYou").classList.add("d-flex");
+    document.getElementById("thankYou").classList.remove("d-none");
+
+    if (total <= 10){
+        document.getElementById("heart").style.fontSize = "20vw";
+    }
+    else if (total > 10 && total <= 100){
+        document.getElementById("heart").style.fontSize = "30vw";
+    }
+    else{
+        document.getElementById("heart").style.fontSize = "50vw";
+    }
 }

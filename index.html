@@ -49,11 +49,165 @@
     <!-- Setup the toast notifications main div when adding items to cart -->
 
     <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed top-0 end-0 p-3" style="margin-top: 80px" id="toast-container">
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="margin-top: 100px; z-index: 100 !important;"
+            id="toast-container">
             <!-- added dynamically -->
         </div>
     </div>
 
+    <!-- complete offcanvas -->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h3 id="offcanvasExampleLabel">Checkout</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="offcanvas-body">
+            <p>Products</p>
+            <ul class="list-group" id="checkout-items">
+                <i>No products in cart</i>
+            </ul>
+            <p class="mt-2">Total details</p>
+            <ul class="list-group" id="checkout-prices">
+            </ul>
+
+            <br>
+
+            <div id="button-checkout">
+            </div>
+        </div>
+
+        <div class="offcanvas-body" id="offcanvas-body-contact" style="display: none">
+            <form class="row g-3 needs-validation" id="contactForm" novalidate>
+                <p class="mb-0 mt-3 lead">Personal Information</p>
+
+                <div class="col-12">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Tarik" required>
+                    <div class="invalid-feedback">
+                        Please enter your name.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="lastname" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Ayvazi" required>
+                    <div class="invalid-feedback">
+                        Please enter your last name.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="phonenumber" class="form-label">Phone number</label>
+                    <input type="text" class="form-control" id="phonenumber" placeholder="067763463554" required
+                        pattern="\d+">
+                    <div class="invalid-feedback">
+                        Please enter a valid phone number.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+
+                <p class="mb-0 mt-3 lead">Address details</p>
+
+                <div class="col-12">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" placeholder="Krems" required>
+                    <div class="invalid-feedback">
+                        Please enter your city.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="country" class="form-label">Select Country</label>
+                    <select class="form-select" id="country" required>
+                        <option value="" selected disabled>Select</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Kosovo">Kosovo</option>
+                        <option value="Germany">Germany</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select your country.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="zipcode" class="form-label">Zip code</label>
+                    <input type="text" class="form-control" id="zipcode" placeholder="3500" required maxlength="6">
+                    <div class="invalid-feedback">
+                        Please enter a valid zip code.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <button class="btn btn-outline-primary" type="button" onclick="goBack()">Back</button>
+                    <button class="btn btn-primary" type="button" onclick="sendGift()">Send Gift</button>
+                </div>
+            </form>
+
+            <script>
+                // Bootstrap validation script
+                (() => {
+                    'use strict'
+                    const forms = document.querySelectorAll('.needs-validation')
+
+                    Array.from(forms).forEach(form => {
+                        form.addEventListener('submit', event => {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+                })();
+            </script>
+
+        </div>
+    </div>
+
+    <!-- confirmation modal -->
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm gifts</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <p class="mt-2 mb-0">Products</p>
+                    <ul class="list-group" id="confirmation-items">
+                    </ul>
+                    <p class="mt-2 mb-0">Total details</p>
+                    <ul class="list-group" id="confirmation-prices">
+                    </ul>
+                    <p class="mt-2 mb-0">Personal details</p>
+                    <ul class="list-group" id="confirmation-info">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="thankYou()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- thank you div -->
+
+    <div id="thankYou" class="bg-primary d-none">
+        <h1 id="heart">❤️</h1>
+        <p class="text-light">Heart size is relative to your donation</p>
+        <a href="index.html" class="btn btn-outline-light">See you again!</a>
+    </div>
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container">
@@ -81,7 +235,8 @@
                     </li>
                 </ul>
                 <!-- SVG was copied from https://icons.getbootstrap.com/icons/cart-fill/ -->
-                <button class="btn btn-primary position-relative">
+                <button class="btn btn-primary position-relative" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasExample" aria-expanded="false" aria-controls="offcanvasExample">
                     <svg style="position: relative; top: -3px" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
                         <path
@@ -271,7 +426,7 @@
 
     <footer class="bg-primary text-light text-center py-4">
         <div class="container">
-            <p class="mb-1">&copy; 2025 HHF. All rights reserved.</p>
+            <p class="mb-1">2025 HHF. Developed with <img src="./imgs/icetea.png" width="30" alt="ice tea"> by Tarik</p>
             <p class="mb-0">
                 <a href="#" class="text-light text-decoration-none mx-2">Start</a> |
                 <a href="#ourmission" class="text-light text-decoration-none mx-2">Our Mission</a> |
