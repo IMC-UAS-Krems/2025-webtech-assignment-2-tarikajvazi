@@ -349,9 +349,9 @@ function thankYou() {
         document.getElementById("heart").style.fontSize = "20vw";
     }
     else if (total > 10 && total <= 100){
-        document.getElementById("heart").style.fontSize = "30vw";
+        document.getElementById("heart").style.fontSize = "27vw";
     }
     else{
-        document.getElementById("heart").style.fontSize = "50vw";
+        document.getElementById("heart").style.fontSize = "35vw";
     }
 }
