@@ -296,14 +296,15 @@ function addToCart(name, type, price, image) {
 
 function sendGift() {
     const form = document.getElementById('contactForm');
-    
+
     // Check if form is valid
+    // https://stackoverflow.com/questions/73130972/bootstrap-5-form-if-valid
+    // Not same code, I just got the idea from here how does it work
     if (!form.checkValidity()) {
-        // If not valid, trigger validation UI
         form.classList.add('was-validated');
-        return; // Exit the function
+        return;
     }
-    
+
     // If form is valid, proceed to show modal and fill confirmation
     document.getElementById("confirmation-info").innerHTML = "";
 
@@ -319,8 +320,10 @@ function sendGift() {
     document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Phone number: " + phonenumber + "</li>";
     document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Email: " + email + "</li>";
     document.getElementById("confirmation-info").innerHTML += "<li class='list-group-item'>Address: " + zipcode + " " + city + ", " + country + "</li>";
-    
+
     // Show the modal
+    // https://stackoverflow.com/questions/76897485/how-to-pop-up-open-bootstrap-modal-using-javascript
+    // The code is not the same I tailored it for here
     const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
     modal.show();
 }
@@ -335,6 +338,8 @@ function goBack() {
     document.getElementById("offcanvas-body-contact").style.display = "none";
 }
 
+// Heart size relative to the donation amount
+
 function thankYou() {
 
     let total = 0;
@@ -345,13 +350,13 @@ function thankYou() {
     document.getElementById("thankYou").classList.add("d-flex");
     document.getElementById("thankYou").classList.remove("d-none");
 
-    if (total <= 10){
+    if (total <= 10) {
         document.getElementById("heart").style.fontSize = "20vw";
     }
-    else if (total > 10 && total <= 100){
+    else if (total > 10 && total <= 100) {
         document.getElementById("heart").style.fontSize = "27vw";
     }
-    else{
+    else {
         document.getElementById("heart").style.fontSize = "35vw";
     }
 }
