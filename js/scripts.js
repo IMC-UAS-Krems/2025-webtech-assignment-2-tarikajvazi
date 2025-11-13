@@ -218,7 +218,7 @@ function addToCart(name, type, price, image) {
         });
     }
 
-    document.getElementById("toast-container").innerHTML += `<div class="toast show bg-success text-white" data-bs-autohide="false" role="alert" aria-live="assertive"
+    document.getElementById("toast-container").innerHTML += `<div class="toast bg-success text-white" data-bs-autohide="true" role="alert" aria-live="assertive"
                 aria-atomic="true">
                 <div class="toast-header bg-success text-white">
                     <strong class="me-auto">HHF - Helpless & Hopeless</strong>
@@ -230,6 +230,19 @@ function addToCart(name, type, price, image) {
                     <b>${name}</b> was added to cart (+${price}.00€)
                 </div>
             </div>`;
+
+
+    // From bootstrap documentation + modification
+
+    const toastElList = document.querySelectorAll('.toast');
+    toastElList.forEach(toastEl => {
+        const toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 3000 });
+        toastEl.addEventListener('hidden.bs.toast', function() {
+            toastEl.remove();
+        });
+    
+        toast.show();
+    });
 
     // count items dynamically (with length of array it is not possible bcs some product may have quantity >1)
 
