@@ -218,23 +218,61 @@ function addToCart(name, type, price, image) {
         });
     }
 
-    document.getElementById("toast-container").innerHTML += `<div class="toast bg-success text-white" data-bs-autohide="true" role="alert" aria-live="assertive"
+    console.log(name + " added");
+    console.log(cart);
+
+    toastMessage(name, price, "success");
+
+    showProducts();
+    
+}
+
+function removeFromCart(name){
+    for (let item = 0; item < cart.length; item++){
+        let price_current = cart[item].product_price
+        if (cart[item].product_name == name){
+            cart[item].quantity--;
+            if (cart[item].quantity <= 0){
+                cart.splice(item, 1) // Remove one at that index
+                console.log("Removed completely " + name);
+            }
+
+            console.log("-1 for " + name);
+            console.log(cart);
+
+            toastMessage(name, price_current, "danger");
+            break;
+        }
+    }
+
+    showProducts();
+}
+
+function toastMessage(name, price, type){
+
+    let sign = (type == "danger") ? "-" : "+";
+
+    let headerBg = "bg-" + type;
+
+    let formatedPrice = price.toFixed(2);
+
+    document.getElementById("toast-container").innerHTML += `<div class="toast ${headerBg} text-white" data-bs-autohide="true" role="alert" aria-live="assertive"
                 aria-atomic="true">
-                <div class="toast-header bg-success text-white">
+                <div class="toast-header ${headerBg} text-white">
                     <strong class="me-auto">HHF - Helpless & Hopeless</strong>
                     <small class="text-white-50">just now</small>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
                         aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
-                    <b>${name}</b> was added to cart (+${price}.00€)
+                    <b>${name}</b> was ${sign == "-" ? "removed from" : "added to"} cart (${sign}${formatedPrice}€)
                 </div>
             </div>`;
 
 
     // From bootstrap documentation + modification
 
-    const toastElList = document.querySelectorAll('.toast');
+    const toastElList = document.querySelectorAll('#toast-container .toast');
     toastElList.forEach(toastEl => {
         const toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 3000 });
         toastEl.addEventListener('hidden.bs.toast', function() {
@@ -243,6 +281,26 @@ function addToCart(name, type, price, image) {
     
         toast.show();
     });
+}
+
+function showProducts(){
+    document.getElementById("checkout-items").innerHTML = "";
+    document.getElementById("checkout-prices").innerHTML = "";
+
+    document.getElementById("confirmation-items").innerHTML = "";
+    document.getElementById("confirmation-prices").innerHTML = "";
+
+    for (let item of cart) {
+        document.getElementById("checkout-items").innerHTML += 
+        "<li class='list-group-item d-flex justify-content-between'>" +
+        "<div class='d-flex justify-content-center align-items-center gap-2'>" +
+            "<img width='30' src='" + item.product_image + "'>" +
+            "<p class='m-0'>" + item.product_name + "</p>" +
+        "</div>" +
+        "<div class='d-flex justify-content-center align-items-center gap-2'><b>" + item.quantity + " x " + item.product_price.toFixed(2) + "€</b>" +
+        "<button class='btn btn-danger btn-sm' onclick=\"removeFromCart('" + item.product_name + "')\">Remove</button></div>" +
+        "</li>";
+    }
 
     // count items dynamically (with length of array it is not possible bcs some product may have quantity >1)
 
@@ -251,20 +309,6 @@ function addToCart(name, type, price, image) {
         item_count += item.quantity;
     }
     document.getElementById("items-in-cart").innerHTML = item_count;
-
-    console.log(name + " added");
-    console.log(cart);
-
-    document.getElementById("checkout-items").innerHTML = "";
-    document.getElementById("checkout-prices").innerHTML = "";
-
-    document.getElementById("confirmation-items").innerHTML = "";
-    document.getElementById("confirmation-prices").innerHTML = "";
-
-    for (let item of cart) {
-        document.getElementById("checkout-items").innerHTML += "<li class='list-group-item d-flex justify-content-between'><div class='d-flex justify-content-center align-items-center gap-2'><img width='30' src='" + item.product_image + "'><p class='m-0'>" + item.product_name + "</p></div><b>" + item.quantity + " x " + item.product_price + ".00€</b></li>";
-    }
-
 
     let total = 0;
 
